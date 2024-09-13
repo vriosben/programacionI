@@ -19,9 +19,20 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
 
     Pendiente:
    
-    - !! Poner letras aleatorias            VALE
+    OBLIGATORIO: 
+
+    - ⁠que numere empezando de 1 y no de 0
+    - poner metodos que hayamos usado
+    - ⁠limpiar comentarios
+    - ⁠⁠hace que todo se implemente en el main
+
+    - !! Poner letras aleatorias            VALE DONE
     - !! Unificar las funciones y los py    VALE Y LAU
     - !! Resumir las palabras que encontro    
+
+
+    NICE TO HAVE 
+    
     - Agregar mas palabras a buscar, que aleatoriamente seleccione x cantidad. Establecer cantidad de palabras segun dificultad.    LAU
     - Decirle cuantas palabras estan escondidas
     - Contar los intentos fallidos y mostrarlo cada vez que falla.
