@@ -5,19 +5,25 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
 - Objetivo: Sopa de Letras
 
 - Características: 
-    - Pedirle al usuario que ingrese una letra para empezar a jugar.
-    - Decirle cuantas palabras estan escondidas.
-    - Crear una matriz y esconder ciertas palabras.
+    - Pedirle al usuario que ingrese Y para empezar a jugar, N para terminar. 
+    - Elegir el tamaño de la matriz según nivel de dificultad:
+        - Fácil(8x8)
+        - Medio(16x16)
+        - Difícil(32x32)
+    - Elegir las palabras a esconder según categoría: 
+        - Ciudades(Paris, Seul, Quito)
+        - Animales(Gato, Perro, Pez)
+        - Tragos(Gin, Ron, Vodka)
+    - Esconder las palabras en la matriz
+    - Rellenar las palabras restantes con letras random
+
+    Pendiente:
+   
+    - Decirle cuantas palabras estan escondidas
     - Contar los intentos fallidos y mostrarlo cada vez que falla.
     - Felicitarlo cuando encontro
     - Al fallar o ganar, informar cuantas palabras quedan
-
-    Para trabajar si hay tiempo: 
-    - Elegir nivel de dificultad. 
-    - Elegir según temática
+    - Mantener la premisa que si aprieta N en cualquier momento, el juego termina
 
 
-- Principales funciones utilizadas
-
-    - crearTablero
-    - ingresarComienzoJuego
+ 
