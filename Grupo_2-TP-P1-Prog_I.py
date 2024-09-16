@@ -74,9 +74,9 @@ def crearMatriz(dificultad):
 # Se le asignan palabras a la matriz, según la categoría; las oculta y devuelve las respuestas.
 def generarJuego(matriz, categoria):
     palabrasCategoria = {
-        'A': ['GATO', 'PERRO', 'PEZ', 'CABALLO', 'VACA', 'OVEJA', 'PATO', 'GALLINA', 'LORO', 'PANDA', 'JIRAFA', 'LEÓN', 'TIGRE', 'ZEBRA', 'ELEFANTE', 'RINOCERONTE', 'OSO', 'COBRA', 'SERPIENTE', 'CANGREJO', 'TIBURÓN'],
-        'C': ['QUITO', 'PARÍS', 'SEÚL', 'LONDRES', 'MADRID', 'BERLÍN', 'ROMA', 'TOKIO', 'PEKÍN', 'MÉXICO', 'MOSCÚ', 'FLORIDA', 'FLORENCIA', 'BOGOTÁ', 'CARACAS', 'EDIMBURGO', 'BRASILIA', 'LISBOA', 'PRAGA', 'VIENA'],
-        'T': ['GIN', 'RON', 'VODKA', 'TEQUILA', 'WHISKY', 'RUM', 'BRANDY', 'COGNAC', 'CHAMPAGNE', 'APEROL', 'MARTINI', 'MOJITO', 'DAIQUIRI', 'NEGRONI', 'MANHATTAN', 'DESTORNILLADOR', 'FERNET', 'SANGRÍA', 'MARGARITA', 'CAIPIRINHA']
+        'A': ['GATO', 'PERRO', 'PEZ', 'CABALLO', 'VACA', 'OVEJA', 'PATO', 'GALLINA', 'LORO', 'PANDA', 'JIRAFA', 'LEON', 'TIGRE', 'ZEBRA', 'ELEFANTE', 'RINOCERONTE', 'OSO', 'COBRA', 'SERPIENTE', 'CANGREJO', 'TIBURON'],
+        'C': ['QUITO', 'PARÍS', 'SEUL', 'LONDRES', 'MADRID', 'BERLIN', 'ROMA', 'TOKIO', 'PEKIN', 'MEXICO', 'MOSCU', 'FLORIDA', 'FLORENCIA', 'BOGOTA', 'CARACAS', 'EDIMBURGO', 'BRASILIA', 'LISBOA', 'PRAGA', 'VIENA'],
+        'T': ['GIN', 'RON', 'VODKA', 'TEQUILA', 'WHISKY', 'RUM', 'BRANDY', 'COGNAC', 'CHAMPAGNE', 'APEROL', 'MARTINI', 'MOJITO', 'DAIQUIRI', 'NEGRONI', 'MANHATTAN', 'DESTORNILLADOR', 'FERNET', 'SANGRIA', 'MARGARITA', 'CAIPIRINHA']
     }
 
     palabrasTotales = palabrasCategoria.get(categoria, [])
@@ -187,8 +187,8 @@ def pedirPalabra(matriz):
     else:
         opcionesFilaColumna = [str(i + 1) for i in range(len(matriz))]
         direccion = pedirRespuesta("¿Es horizontal (H) o vertical (V)?: ", ['H', 'V']).upper()
-        filaInicial = int(pedirRespuesta(f"¿En qué número de fila comienza?: (1-{len(matriz)}): ", opcionesFilaColumna)) - 1
-        columnaInicial = int(pedirRespuesta(f"¿En qué número de columna comienza?: (1-{len(matriz)}): ", opcionesFilaColumna)) - 1
+        filaInicial = int(pedirRespuesta(f"¿En qué número de fila comienza? (1-{len(matriz)}): ", opcionesFilaColumna)) - 1
+        columnaInicial = int(pedirRespuesta(f"¿En qué número de columna comienza? (1-{len(matriz)}): ", opcionesFilaColumna)) - 1
 
         respuestaUsuario = {
             "direccion": direccion,
