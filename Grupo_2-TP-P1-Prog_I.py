@@ -21,6 +21,16 @@
         → El usuario debe encontrar todas las palabras o ingresar "N" si desea finalizar el juego antes.
         → Informar al usuario la ubicación de las respuestas y el número de palabras encontradas, si decide finalizar antes. '''
 
+#Segundo Parcial
+
+##TO BE:
+''' 
+        - ⁠scroring
+        - ⁠ctrl + c para terminar 
+        - ⁠⁠ingresar archivos para poner las palabras
+        - ⁠⁠un logeo?
+        - validación de archivos''' 
+
 import random
 import string
 
