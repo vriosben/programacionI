@@ -25,21 +25,14 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
 
     Pendiente:     
    
-    OBLIGATORIO: 
-    
-    - poner metodos que hayamos usado
-    - ⁠limpiar comentarios
-    - ⁠⁠hace que todo se implemente en el main
+   PARTE 2 - Ideas para agregar:
+    - Guardar todas las palabras de la sopa y las respuestas para la sopa en juego.
+    - Guardar el estado de juego y cargar para retomar juego.
+    - Guardar un archivo con puntajes más altos que el usuario puede consultar.
+    - Algo con recursión.
+    - Sacar la funcionalidad de la N que ya se implementa con ctrl c
 
-
-    NICE TO HAVE    
-    
-    - Agregar mas palabras a buscar, que aleatoriamente seleccione x cantidad. Establecer cantidad de palabras segun dificultad.    LAU
-    - Decirle cuantas palabras estan escondidas
-    - Contar los intentos fallidos y mostrarlo cada vez que falla.
-    - Felicitarlo cuando encontro
-    - Al fallar o ganar, informar cuantas palabras quedan
-    - Mantener la premisa que si aprieta N en cualquier momento, el juego termina
+ 
 
     PARTE 2 - Se agregó:
 
