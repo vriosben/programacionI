@@ -1,0 +1,11 @@
+[
+    {
+        "tipo": "TypeError",
+        "detalles": "Traceback (most recent call last):\n  File \"c:\\Users\\PC\\Desktop\\UADE\\1-Algoritmos y Estructura de Datos\\TP Grupal\\programacionI\\PARTE 2 - Grupo_2-TP-P2-Prog_I.py\", line 293, in main\n    categoria, dificultad = iniciarJuego()\n                            ^^^^^^^^^^^^^^\n  File \"c:\\Users\\PC\\Desktop\\UADE\\1-Algoritmos y Estructura de Datos\\TP Grupal\\programacionI\\PARTE 2 - Grupo_2-TP-P2-Prog_I.py\", line 53, in iniciarJuego\n    raise TypeError\nTypeError\n",
+        "ultima traza": {
+            "linea": 53,
+            "funcion": "iniciarJuego",
+            "contexto": "raise TypeError"
+        }
+    }
+]

@@ -40,6 +40,15 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
     - Felicitarlo cuando encontro
     - Al fallar o ganar, informar cuantas palabras quedan
     - Mantener la premisa que si aprieta N en cualquier momento, el juego termina
+
+    PARTE 2 - Se agregó:
+
+    - Exception KeyInterrupt para salir con ctrl c en cualquier momento. (FALTA ARREGLAR EL N que hace lo mismo)
+    - Dos excepciones personalizadas nuevas: PalabraEncontradaError y PalabraInvalidaError, que suceden si el usuario responde con con palabra que ya encontró o que no está en la sopa, respectivamente.
+    - Excepciones ValueError, TypeError, IndexError en main. Si alguno de estos errores ocurre, se guardan los detalles en un log de errores para que el programador pueda analizarlos y corregirlos.
+    - Funciones leerJson, escribirJson y registrarError.
+    - archivo log_errores.json
+
     
 
 
