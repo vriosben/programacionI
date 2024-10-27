@@ -26,7 +26,6 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
     Pendiente:     
    
    PARTE 2 - Ideas para agregar:
-    - Guardar todas las palabras de las categorias de la sopa.
     - Guardar un archivo con puntajes más altos que el usuario puede consultar.
     - Algo con recursión.
     
@@ -38,14 +37,19 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
     - Dos excepciones personalizadas nuevas: PalabraEncontradaError y PalabraInvalidaError, que suceden si el usuario responde con con palabra que ya encontró o que no está en la sopa, respectivamente.
     - Excepciones ValueError, TypeError, IndexError en main. Si alguno de estos errores ocurre, se guardan los detalles en un log de errores para que el programador pueda analizarlos y corregirlos.
     - Funciones leerJson, escribirJson y registrarError.
-    - archivo log_errores.json
+    - Archivo log_errores.json
 
-    - Guardar el estado de juego y cargar para retomar juego. LISTO
+    - Guardar el estado de juego y cargar para retomar juego. 
     - Funcion registrarEstado - para guardar todos los datos de la sopa en juego.
     - Funcion limpiarEstado - para borrar los datos guardados cuando el usuario se rinde.
     - Funcion detectarJuegoPrevio - revisa si hay un juego previo guardado y da la opcion de retomarlo o empezar otro.
     - Funcion iniciarJuegoPrevio - vuelve a cargar el juego que esta guardado.
-    - archivo estado_sopa.json
+    - Archivo estado_sopa.json
+
+    - Guardar todas las palabras de las categorias de la sopa en JSON. 
+    - Modificaciones en la funcion generarJuego para que acceda al JSON con las palabras guardadas.
+    - archivo palabras.json
+    - Excepcion DatoVacioError por si no se pueden extrar los datos del archivo JSON
 
 
     

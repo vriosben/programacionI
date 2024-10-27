@@ -42,6 +42,9 @@ class PalabraEncontradaError(Exception):
 class PalabraInvalidaError(Exception):
     pass
 
+class DatoVacioError(Exception):
+    pass
+
 # Inicia el juego y le consulta al usuario si desea continuar, la categoría y la dificultad
 def iniciarJuego():
     opcionesJuego = ['Y']
@@ -88,14 +91,15 @@ def crearMatriz(dificultad):
 
 # Se le asignan palabras a la matriz, según la categoría; las oculta y devuelve las respuestas.
 def generarJuego(matriz, categoria):
-    palabrasCategoria = {
-        'A': ['GATO', 'PERRO', 'PEZ', 'CABALLO', 'VACA', 'OVEJA', 'PATO', 'GALLINA', 'LORO', 'PANDA', 'JIRAFA', 'LEON', 'TIGRE', 'ZEBRA', 'ELEFANTE', 'RINOCERONTE', 'OSO', 'COBRA', 'SERPIENTE', 'CANGREJO', 'TIBURON'],
-        'C': ['QUITO', 'PARÍS', 'SEUL', 'LONDRES', 'MADRID', 'BERLIN', 'ROMA', 'TOKIO', 'PEKIN', 'MEXICO', 'MOSCU', 'FLORIDA', 'FLORENCIA', 'BOGOTA', 'CARACAS', 'EDIMBURGO', 'BRASILIA', 'LISBOA', 'PRAGA', 'VIENA'],
-        'T': ['GIN', 'RON', 'VODKA', 'TEQUILA', 'WHISKY', 'RUM', 'BRANDY', 'COGNAC', 'CHAMPAGNE', 'APEROL', 'MARTINI', 'MOJITO', 'DAIQUIRI', 'NEGRONI', 'MANHATTAN', 'DESTORNILLADOR', 'FERNET', 'SANGRIA', 'MARGARITA', 'CAIPIRINHA']
-    }
+    palabras = leerJson('palabras.json')
+    if palabras is None:
+        raise DatoVacioError("No se pudo inicializar juego porque es imposible acceder al archivo de palabras. ")
 
-    palabrasTotales = palabrasCategoria.get(categoria, [])
-    palabrasEscondidas = list(seleccionarPalabras(palabrasTotales, matriz))
+    for item in palabras:
+        if item["categoria"] == categoria:
+            palabrasCategoria = item["palabras"]
+   
+    palabrasEscondidas = list(seleccionarPalabras(palabrasCategoria, matriz))
 
     coordOcupadas = set()
     respuestas = {}
@@ -106,12 +110,12 @@ def generarJuego(matriz, categoria):
     return respuestas
 
 # Selecciona las palabras a esconder, según la matriz y la categoría
-def seleccionarPalabras(palabrasTotales, matriz):
+def seleccionarPalabras(palabrasCategoria, matriz):
     palabrasEscondidas = set()
     while len(palabrasEscondidas) != (len(matriz) // 2):
-        indice = random.randint(0, len(palabrasTotales) - 1)
-        if len(palabrasTotales[indice]) <= len(matriz):
-            palabrasEscondidas.add(palabrasTotales[indice])
+        indice = random.randint(0, len(palabrasCategoria) - 1)
+        if len(palabrasCategoria[indice]) <= len(matriz):
+            palabrasEscondidas.add(palabrasCategoria[indice])
 
     return palabrasEscondidas
 
@@ -380,6 +384,9 @@ def main():
 
             mostrarEstadoJuego(palabrasTotales, palabrasEncontradas, matriz)
         print("¡Felicidades! Ha encontrado todas las palabras.")
+
+    except DatoVacioError as e:
+        print(e)
 
     except (ValueError, TypeError, IndexError) as e:
         print("Ocurrió un error inesperado. El juego se ha cerrado.")
