@@ -26,13 +26,11 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
     Pendiente:     
    
    PARTE 2 - Ideas para agregar:
-    - Guardar todas las palabras de la sopa y las respuestas para la sopa en juego.
-    - Guardar el estado de juego y cargar para retomar juego.
+    - Guardar todas las palabras de las categorias de la sopa.
     - Guardar un archivo con puntajes más altos que el usuario puede consultar.
     - Algo con recursión.
-    - Sacar la funcionalidad de la N que ya se implementa con ctrl c
+    
 
- 
 
     PARTE 2 - Se agregó:
 
@@ -41,6 +39,14 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
     - Excepciones ValueError, TypeError, IndexError en main. Si alguno de estos errores ocurre, se guardan los detalles en un log de errores para que el programador pueda analizarlos y corregirlos.
     - Funciones leerJson, escribirJson y registrarError.
     - archivo log_errores.json
+
+    - Guardar el estado de juego y cargar para retomar juego. LISTO
+    - Funcion registrarEstado - para guardar todos los datos de la sopa en juego.
+    - Funcion limpiarEstado - para borrar los datos guardados cuando el usuario se rinde.
+    - Funcion detectarJuegoPrevio - revisa si hay un juego previo guardado y da la opcion de retomarlo o empezar otro.
+    - Funcion iniciarJuegoPrevio - vuelve a cargar el juego que esta guardado.
+    - archivo estado_sopa.json
+
 
     
 
