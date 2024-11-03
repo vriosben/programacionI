@@ -27,9 +27,7 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
    
    PARTE 2 - Ideas para agregar:
     - Guardar un archivo con puntajes más altos que el usuario puede consultar.
-    - Algo con recursión.
     
-
 
     PARTE 2 - Se agregó:
 
@@ -50,6 +48,8 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
     - Modificaciones en la funcion generarJuego para que acceda al JSON con las palabras guardadas.
     - archivo palabras.json
     - Excepcion DatoVacioError por si no se pueden extrar los datos del archivo JSON
+
+     - Recursividad: cambios en funciones pedirRespuesta y esconderPalabra para que sean recursivas.
 
 
     

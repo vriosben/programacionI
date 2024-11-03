@@ -58,12 +58,21 @@ def iniciarJuego():
         return categoria, dificultad
 
 # Solicita una respuesta válida al usuario
+    # def pedirRespuesta(mensaje, opciones):
+    #     while True:
+    #         respuesta = input(mensaje).strip().upper()
+    #         if respuesta in opciones:
+    #             return respuesta
+    #         print(f"Por favor, ingrese una opción válida: {', '.join(opciones)}")
+
 def pedirRespuesta(mensaje, opciones):
-    while True:
-        respuesta = input(mensaje).strip().upper()
-        if respuesta in opciones:
-            return respuesta
-        print(f"Por favor, ingrese una opción válida: {', '.join(opciones)}")
+    respuesta = input(mensaje).strip().upper()
+    
+    if respuesta in opciones:   # Caso base: si la respuesta es válida, se retorna
+        return respuesta
+    else:                       # Caso recursivo: si la respuesta no es válida, se llama a sí misma
+        print(f"Por favor, ingresa una opción válida: {', '.join(opciones)}")
+        return pedirRespuesta(mensaje, opciones)
 
 # Permite al usuario elegir una categoría
 def elegirCategoria():
@@ -121,29 +130,32 @@ def seleccionarPalabras(palabrasCategoria, matriz):
 
 # Esconde una palabra en la matriz
 def esconderPalabra(palabra, matriz, coordOcupadas):
-    while True:
-        posicion = random.randint(0, 1)
+    posicion = random.randint(0, 1)
+    
+    if posicion == 0:  # Horizontal
+        filaCoord = random.randint(0, len(matriz) - 1)
+        columnaCoord = random.randint(0, len(matriz) - len(palabra))
+        coordPalabra = [(filaCoord, columnaCoord + i) for i in range(len(palabra))] 
+    else:  # Vertical
+        filaCoord = random.randint(0, len(matriz) - len(palabra))
+        columnaCoord = random.randint(0, len(matriz) - 1)
+        coordPalabra = [(filaCoord + i, columnaCoord) for i in range(len(palabra))] 
+    
+    # Caso base: si coordPalabra no se superpone con coordOcupadas
+    if not set(coordPalabra) & coordOcupadas:
+        for letra in palabra:
+            if posicion == 0:
+                matriz[filaCoord][columnaCoord] = letra
+                columnaCoord += 1
+            else:
+                matriz[filaCoord][columnaCoord] = letra
+                filaCoord += 1
 
-        if posicion == 0:   # Horizontal
-            filaCoord = random.randint(0, len(matriz) - 1)
-            columnaCoord = random.randint(0, len(matriz) - len(palabra))
-            coordPalabra = [(filaCoord, columnaCoord + i) for i in range(len(palabra))]
-        else:   # Vertical
-            filaCoord = random.randint(0, len(matriz) - len(palabra))
-            columnaCoord = random.randint(0, len(matriz) - 1)
-            coordPalabra = [(filaCoord + i, columnaCoord) for i in range(len(palabra))]
-
-        if not set(coordPalabra) & coordOcupadas:
-            for letra in palabra:
-                if posicion == 0:
-                    matriz[filaCoord][columnaCoord] = letra
-                    columnaCoord += 1
-                else:
-                    matriz[filaCoord][columnaCoord] = letra
-                    filaCoord += 1
-
-            coordOcupadas.update(coordPalabra)
-            return coordPalabra, posicion
+        coordOcupadas.update(coordPalabra)
+        return coordPalabra, posicion
+    else:
+        # Llamada recursiva si coordPalabra se superpone con coordOcupadas
+        return esconderPalabra(palabra, matriz, coordOcupadas)
 
 # Guarda la respuesta de la posición en la que está oculta la palabra
 def guardarRespuesta(coordPalabra, posicion):
