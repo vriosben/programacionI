@@ -1,14 +1,12 @@
 [
-    {   
-        "categoria" : "A",
+    {
+        "categoria": "A",
         "palabras": ["GATO", "PERRO", "PEZ", "CABALLO", "VACA", "OVEJA", "PATO", "GALLINA", "LORO", "PANDA", "JIRAFA", "LEON", "TIGRE", "ZEBRA", "ELEFANTE", "RINOCERONTE", "OSO", "COBRA", "SERPIENTE", "CANGREJO", "TIBURON"]
-    },
-    {
-        "categoria" : "C",
+    },{
+        "categoria": "C",
         "palabras": ["QUITO", "PARIS", "SEUL", "LONDRES", "MADRID", "BERLIN", "ROMA", "TOKIO", "PEKIN", "MEXICO", "MOSCU", "FLORIDA", "FLORENCIA", "BOGOTA", "CARACAS", "EDIMBURGO", "BRASILIA", "LISBOA", "PRAGA", "VIENA"]
-    },
-    {
-        "categoria" : "T",
+    },{
+        "categoria": "T",
         "palabras": ["GIN", "RON", "VODKA", "TEQUILA", "WHISKY", "RUM", "BRANDY", "COGNAC", "CHAMPAGNE", "APEROL", "MARTINI", "MOJITO", "DAIQUIRI", "NEGRONI", "MANHATTAN", "DESTORNILLADOR", "FERNET", "SANGRIA", "MARGARITA", "CAIPIRINHA"]
     }
 ]
