@@ -1,10 +1,11 @@
-# Trabajo Práctico Cuatrimestral // Proyecto Grupal (1° Parte) - 2° Cuatrimestre 2024
+# Trabajo Práctico Cuatrimestral // Proyecto Grupal (2° Parte) - 2° Cuatrimestre 2024
 # Asignatura: Programación I | Algoritmos y Estructuras de Datos I
 # Integrantes: Di Corrado, Candela; Morello Flores, María Laura; Ríos Benítez, Nancy Valeria
 ''' Especificaciones:
         → Objetivo: Sopa de Letras
     Características:    
-        → Pedirle al usuario que ingrese "Y" para empezar a jugar, "N" para terminar.
+        → Pedirle al usuario que ingrese "Y" para empezar a jugar o "Ctrl + C" para salir. 
+        → Podrá salir con "Ctrl + C" en cualquier momento del juego y se guardará el estado del juego.
         → Elegir el tamaño de la matriz según el nivel de dificultad:
             * Fácil (8x8)
             * Medio (12x12)
@@ -18,19 +19,14 @@
         → Mostrar la sopa y las palabras a buscar para empezar a jugar.
         → Solicitar las palabras encontradas por el usuario.
         → Informar el estado actual del juego después de cada palabra encontrada.
-        → El usuario debe encontrar todas las palabras o ingresar "N" si desea finalizar el juego antes.
-        → Informar al usuario la ubicación de las respuestas y el número de palabras encontradas, si decide finalizar antes. '''
-
-#Segundo Parcial
-
-##TO BE:
-''' 
-        - ⁠scroring
-        - ⁠ctrl + c para terminar 
-        - ⁠⁠ingresar archivos para poner las palabras
-        - ⁠⁠un logeo?
-        - validación de archivos''' 
-
+        → El usuario debe encontrar todas las palabras o ingresar "R" si desea rendirse y finalizar el juego antes.
+        → Informar al usuario la ubicación de las respuestas si decide finalizar antes. 
+        → Tanto el encontrar todas las palabras como al rendirse, se muestra la cantidad de palabras encontradas y la puntuación obtenida. 
+        → Si el jugador obtiene una puntuación maxima, se registra en el ranking de puntuaciones.
+        → Antes de finalizar, se le da la opcion al jugador de ver el ranking de puntuaciones.
+        → El jugador tendrá la opcion de retomar el juego previo si decidio salir mediante "Ctrl + C" antes de rendirse o encontrar todas las palabras.
+        → Extra para el programador: log que registra los errores que afectaron al jugador. 
+        '''
 import random
 import string
 import traceback
@@ -42,7 +38,7 @@ class PalabraEncontradaError(Exception):
 class PalabraInvalidaError(Exception):
     pass
 
-class DatoVacioError(Exception):
+class archivoPalabrasError(Exception):
     pass
 
 # Inicia el juego y le consulta al usuario si desea continuar, la categoría y la dificultad
@@ -58,21 +54,17 @@ def iniciarJuego():
         return categoria, dificultad
 
 # Solicita una respuesta válida al usuario
-    # def pedirRespuesta(mensaje, opciones):
-    #     while True:
-    #         respuesta = input(mensaje).strip().upper()
-    #         if respuesta in opciones:
-    #             return respuesta
-    #         print(f"Por favor, ingrese una opción válida: {', '.join(opciones)}")
-
 def pedirRespuesta(mensaje, opciones):
     respuesta = input(mensaje).strip().upper()
-    
-    if respuesta in opciones:   # Caso base: si la respuesta es válida, se retorna
-        return respuesta
-    else:                       # Caso recursivo: si la respuesta no es válida, se llama a sí misma
-        print(f"Por favor, ingresa una opción válida: {', '.join(opciones)}")
+    try:
+        if respuesta in opciones:   
+            return respuesta
+        else:                       
+            print(f"Por favor, ingresa una opción válida: {', '.join(opciones)}")
         return pedirRespuesta(mensaje, opciones)
+    except RecursionError as e:
+        registrarError(e)
+        print("Demasiados intentos fallidos.")
 
 # Permite al usuario elegir una categoría
 def elegirCategoria():
@@ -101,9 +93,9 @@ def crearMatriz(dificultad):
 # Se le asignan palabras a la matriz, según la categoría; las oculta y devuelve las respuestas.
 def generarJuego(matriz, categoria):
     palabras = leerJson('palabras.json')
-    if palabras is None:
-        raise DatoVacioError("No se pudo inicializar juego porque es imposible acceder al archivo de palabras. ")
-
+    if not palabras:
+        raise archivoPalabrasError("No se pudo inicializar el juego porque ocurrió un error al acceder al archivo de palabras. ")
+    
     for item in palabras:
         if item["categoria"] == categoria:
             palabrasCategoria = item["palabras"]
@@ -130,32 +122,34 @@ def seleccionarPalabras(palabrasCategoria, matriz):
 
 # Esconde una palabra en la matriz
 def esconderPalabra(palabra, matriz, coordOcupadas):
-    posicion = random.randint(0, 1)
-    
-    if posicion == 0:  # Horizontal
-        filaCoord = random.randint(0, len(matriz) - 1)
-        columnaCoord = random.randint(0, len(matriz) - len(palabra))
-        coordPalabra = [(filaCoord, columnaCoord + i) for i in range(len(palabra))] 
-    else:  # Vertical
-        filaCoord = random.randint(0, len(matriz) - len(palabra))
-        columnaCoord = random.randint(0, len(matriz) - 1)
-        coordPalabra = [(filaCoord + i, columnaCoord) for i in range(len(palabra))] 
-    
-    # Caso base: si coordPalabra no se superpone con coordOcupadas
-    if not set(coordPalabra) & coordOcupadas:
-        for letra in palabra:
-            if posicion == 0:
-                matriz[filaCoord][columnaCoord] = letra
-                columnaCoord += 1
-            else:
-                matriz[filaCoord][columnaCoord] = letra
-                filaCoord += 1
+    try:
+        posicion = random.randint(0, 1)
+        
+        if posicion == 0:  # Horizontal
+            filaCoord = random.randint(0, len(matriz) - 1)
+            columnaCoord = random.randint(0, len(matriz) - len(palabra))
+            coordPalabra = [(filaCoord, columnaCoord + i) for i in range(len(palabra))] 
+        else:  # Vertical
+            filaCoord = random.randint(0, len(matriz) - len(palabra))
+            columnaCoord = random.randint(0, len(matriz) - 1)
+            coordPalabra = [(filaCoord + i, columnaCoord) for i in range(len(palabra))] 
+        
+        if not set(coordPalabra) & coordOcupadas:
+            for letra in palabra:
+                if posicion == 0:
+                    matriz[filaCoord][columnaCoord] = letra
+                    columnaCoord += 1
+                else:
+                    matriz[filaCoord][columnaCoord] = letra
+                    filaCoord += 1
 
-        coordOcupadas.update(coordPalabra)
-        return coordPalabra, posicion
-    else:
-        # Llamada recursiva si coordPalabra se superpone con coordOcupadas
-        return esconderPalabra(palabra, matriz, coordOcupadas)
+            coordOcupadas.update(coordPalabra)
+            return coordPalabra, posicion
+        else:
+            return esconderPalabra(palabra, matriz, coordOcupadas)
+    except RecursionError as e:
+        registrarError(e)
+        print("Demasiados intentos fallidos.")
 
 # Guarda la respuesta de la posición en la que está oculta la palabra
 def guardarRespuesta(coordPalabra, posicion):
@@ -218,7 +212,6 @@ def pedirPalabra(matriz, palabrasTotales, palabrasEncontradas):
     if palabraUsuario in palabrasEncontradas:
         raise PalabraEncontradaError(f"La palabra ingresada '{palabraUsuario}' ya fue encontrada. Reintentar.")   
     
-
     if palabraUsuario == 'R':
         return palabraUsuario, None
 
@@ -250,13 +243,21 @@ def comprobarRespuesta(respuestaUsuario, respuestas, palabra):
 
     return False
 
-# Informa las palabras encontradas y muestra las respuestas
-def finalizarJuego(palabrasEncontradas, palabrasTotales, matrizRespuestas):
+# Finaliza el juego, mostrando las palabras encontradas y la puntuación final. Actualiza el ranking de puntuaciones y limpia el estado del juego guardado.
+def finalizarJuego(palabrasEncontradas, palabrasTotales, intentos, dificultad):
+    puntuacion = puntuar(palabrasEncontradas, palabrasTotales, intentos, dificultad)
     print(f"El juego ha terminado.\nTotal de palabras encontradas: {len(palabrasEncontradas)}/{len(palabrasTotales)}")
-    print("Respuestas: ")
-    mostrarMatriz(matrizRespuestas)
+    print(f"Puntuación final: {puntuacion}")
+    try:
+        comprobarHighscores(puntuacion)
+        mostrarHighscores()
+    except (ValueError, TypeError, IndexError) as e:
+        print("Hay un problema con el ranking de puntuaciones. Imposible guardar o acceder al ranking. Intente más tarde.")
+        registrarError(e)
+    finally:
+        limpiarEstado() 
 
-
+# Lee un archivo JSON y devuelve el contenido como una lista. Si el archivo está vacío devuelve una lista vacia, si no existe o el formato está mal, maneja excepciones.
 def leerJson(ubicacion):
     try:
         with open(ubicacion, 'r') as f:
@@ -267,41 +268,41 @@ def leerJson(ubicacion):
             f.seek(0)  
             return json.load(f) 
 
-    except FileNotFoundError:
+    except FileNotFoundError as e:
         print("No se pudo encontrar el archivo.") 
         return None
-    except json.JSONDecodeError:
+    
+    except json.JSONDecodeError as e:
         print("El formato JSON del archivo es inválido.")
         return None
         
-
+# Escribe los datos proporcionados en un archivo JSON
 def escribirJson(ubicacion, datos):
-    try:
-        with open(ubicacion, 'w') as f:
-            json.dump(datos, f, indent = 4)
-    except FileNotFoundError:
-        print("No se pudo encontrar el archivo.") 
+   with open(ubicacion, 'w') as f:
+        json.dump(datos, f, indent = 4)
 
-
-def registrarError(e, ubicacion = "log_errores.json"):   
+# Registra un error en un archivo de log en formato JSON, incluyendo detalles sobre el tipo de error y su traza.
+def registrarError(e):
+    ubicacion = "log_errores.json"   
     errorInfo = traceback.format_exc()
-    errorPila = traceback.extract_tb(e.__traceback__)            
+    errorPila = traceback.extract_tb(e._traceback_)            
     
     error = {
-            "tipo":e.__class__.__name__ ,
+            "tipo":e._class.name_ ,
             "detalles":errorInfo, 
-            "ultima traza": {"linea": errorPila[-1].lineno,"funcion": errorPila[-1].name,"contexto": errorPila[-1].line.strip()}               
+            "ultima traza": {"linea": str(errorPila[-1].lineno),"funcion": errorPila[-1].name,"contexto": errorPila[-1].line.strip()}               
             }
-
+    
     listaErrores = leerJson(ubicacion)
     if listaErrores is None:
-         print("No se pudo guardar el error.")
-         return
-   
+        print("No se pudo guardar el error.")
+        return
     listaErrores.append(error)
+
     escribirJson(ubicacion, listaErrores)
 
 
+# Se evalúa si existe una partida ya iniciada del juego, revisando el archivo JSON de estado del juego. Si es así, pregunta al usuario si quiere continuar el juego anterior o comenzar uno nuevo.
 def detectarJuegoPrevio():
     juegoPrevio = leerJson('estado_sopa.json')
     
@@ -313,7 +314,7 @@ def detectarJuegoPrevio():
     else:
         return 'N'
 
-
+# Se inicia la partida ya existente del juego, restaurando el estado guardado en el archivo JSON.
 def iniciarJuegoPrevio():
     juegoPrevio = leerJson('estado_sopa.json')
     matriz = juegoPrevio[0]["matriz"]
@@ -321,10 +322,12 @@ def iniciarJuegoPrevio():
     matrizRespuestas = juegoPrevio[0]["matrizRespuestas"]
     palabrasTotales = set(juegoPrevio[0]["palabrasTotales"])
     palabrasEncontradas = set(juegoPrevio[0]["palabrasEncontradas"])
-    return matriz, respuestas, matrizRespuestas, palabrasTotales, palabrasEncontradas 
+    dificultad = juegoPrevio[0]["dificultad"]
+    intentos = int(juegoPrevio[0]["intentos"])
+    return matriz, respuestas, matrizRespuestas, palabrasTotales, palabrasEncontradas, dificultad, intentos 
 
-
-def registrarEstado(matriz, respuestas, matrizRespuestas, palabrasTotales, palabrasEncontradas):
+# Guarda el estado del juego en el archivo JSON.
+def registrarEstado(matriz, respuestas, matrizRespuestas, palabrasTotales, palabrasEncontradas, dificultad, intentos):
     ubicacion = 'estado_sopa.json'
 
     estadoJuego = [{
@@ -332,19 +335,106 @@ def registrarEstado(matriz, respuestas, matrizRespuestas, palabrasTotales, palab
         "respuestas": respuestas,
         "matrizRespuestas":matrizRespuestas,
         "palabrasTotales": list(palabrasTotales),
-        "palabrasEncontradas": list(palabrasEncontradas)
+        "palabrasEncontradas": list(palabrasEncontradas),
+        "intentos":str(intentos),
+        "dificultad":dificultad
     }]
 
     escribirJson(ubicacion, estadoJuego)
 
-
+# Borra todo el estado del juego guardado en el archivo JSON.
 def limpiarEstado():
     ubicacion = 'estado_sopa.json'
-    try:
-        with open(ubicacion, 'w') as f:
-            f.write("")
-    except FileNotFoundError:
-        print("No se pudo encontrar el archivo.") 
+    
+    with open(ubicacion, 'w') as f:
+            f.write("") 
+
+# Calcula la puntuación basada en el número de palabras encontradas, la cantidad de intentos y la dificultad del juego.
+def puntuar(palabrasEncontradas, palabrasTotales, intentos, dificultad):
+    aciertos = len(palabrasEncontradas)
+    puntuacion = aciertos*100
+    if aciertos == len(palabrasTotales):
+        if intentos == aciertos:
+            puntuacion += 1000
+        elif intentos <= round(aciertos*1.5):  
+            puntuacion += 500  
+        elif intentos <= aciertos*2:
+            puntuacion += 250  
+
+    if dificultad == "M":
+        puntuacion = puntuacion * 10
+    if dificultad == "D":
+        puntuacion = puntuacion * 20
+  
+    return puntuacion
+
+# Comprueba si la puntuación del jugador está dentro de los primeros 5 en el ranking, y la registra si es necesario.
+def comprobarHighscores(puntuacion):
+    ubicacion = 'highscores.txt'
+
+    with open(ubicacion, 'a') as f: 
+        highscore = f"jugador;{puntuacion}\n"
+        f.write(highscore)
+    
+    with open(ubicacion, 'r') as f: 
+        highscores = f.readlines()
+    
+    if len(highscore) > 6 :
+        highscores = highscores[:6] 
+    
+    if len(highscores) == 6:
+        score6 = highscores[5].split(";")[1]
+        score5 = highscores[4].split(";")[1]
+        
+        if score6 > score5: 
+            jugador = input("¡Felicidades, has superado una puntuación del ranking!\nIngresa tu nombre para registrar tu nuevo record (se mostrarán hasta 15 caracteres): ")
+            highscores[5] = f"{jugador};{puntuacion}\n"
+            highscores[4] = highscores[5] 
+        highscores = highscores[:5] 
+
+    else:
+        jugador = input("¡Felicidades, has ingresado en el ranking de puntuaciones!\nIngresa tu nombre para registrarlo (se mostrarán hasta 15 caracteres): ")
+        highscores[-1] = f"{jugador};{puntuacion}\n"
+
+    highscores = ordenarHighscores(highscores)
+    
+    with open(ubicacion, 'w') as f:
+        for registro in highscores:
+            f.write(registro)        
+    
+# Ordena el ranking de puntuaciones de mayor a menor en función de la puntuación.
+def ordenarHighscores(highscores):
+    for i in range(len(highscores)):
+        for j in range(i + 1, len(highscores)):
+            score1 = int(highscores[i].split(";")[1])
+            score2 = int(highscores[j].split(";")[1])
+            if score1 < score2:
+                highscores[i], highscores[j] = highscores[j], highscores[i]
+    return highscores 
+         
+# Muestra la tabla de puntuaciones del ranking, si el jugador decide verla.
+def mostrarHighscores():
+    ubicacion = 'highscores.txt'
+    mensaje = "¿Quiere ver la tabla de Highscores?\n(Ingrese 'Y' para ver la tabla, 'N' en caso contrario): "
+    opciones = ['Y','N']
+    respuesta = pedirRespuesta(mensaje,opciones)
+
+    if respuesta == 'Y':
+        try:
+            with open(ubicacion, 'r') as f:
+                highscores = f.readlines()
+        
+        except FileNotFoundError as e:
+            print("No se ha encontrado el ranking de puntuaciones.")
+            registrarError(e)
+
+        else:
+            print("Ranking de Puntuaciones:")
+            puesto = 1
+            for registro in highscores:
+                jugador,score = registro.strip().split(";") 
+                print(f"Puesto {puesto}: {jugador[:15].ljust(15)} {score} puntos")
+                puesto += 1 
 
 
 # Programa Principal → Función para ejecutar el juego
@@ -352,7 +442,7 @@ def main():
     try:
         juego = detectarJuegoPrevio()
         if juego == 'V':
-            matriz, respuestas, matrizRespuestas, palabrasTotales,palabrasEncontradas = iniciarJuegoPrevio()
+            matriz, respuestas, matrizRespuestas, palabrasTotales,palabrasEncontradas,dificultad,intentos = iniciarJuegoPrevio()
             mostrarEstadoJuego(palabrasTotales, palabrasEncontradas, matriz)
 
         else:
@@ -363,8 +453,9 @@ def main():
                 palabrasTotales = set(respuestas.keys())
                 matrizRespuestas = crearMatrizRespuesta(matriz, respuestas, palabrasTotales)
                 palabrasEncontradas = set()
+                intentos = 0
 
-                registrarEstado(matriz, respuestas, matrizRespuestas, palabrasTotales, palabrasEncontradas)
+                registrarEstado(matriz, respuestas, matrizRespuestas, palabrasTotales, palabrasEncontradas, dificultad,intentos)
 
                 mostrarPalabrasEscondidas(palabrasTotales)
                 mostrarMatriz(matriz)
@@ -377,28 +468,30 @@ def main():
                 continue
 
             if palabraUsuario == 'R':
-                finalizarJuego(palabrasEncontradas, palabrasTotales, matrizRespuestas)
-                limpiarEstado()
+                print("Respuestas: ")
+                mostrarMatriz(matrizRespuestas)
+                finalizarJuego(palabrasEncontradas, palabrasTotales, intentos, dificultad)
                 return
 
             if palabraUsuario in palabrasTotales - palabrasEncontradas:
+                intentos += 1
                 if comprobarRespuesta(respuestaUsuario, respuestas, palabraUsuario):
                     palabrasEncontradas.add(palabraUsuario)
                     for fila, columna in respuestas[palabraUsuario]["coordenadas"]:
                          matriz[fila][columna] = "-"
-                    registrarEstado(matriz, respuestas, matrizRespuestas, palabrasTotales, palabrasEncontradas)
-                    print("¡Correcto!")
+                    print("\n¡Correcto!")
                 else:
-                    print("Respuesta incorrecta. Inténtelo de nuevo.")
-
-            else:
-                print(f"Palabra no válida o ya encontrada. Inténtelo de nuevo.")
+                    print("\nRespuesta incorrecta. Inténtelo de nuevo.")
+                registrarEstado(matriz, respuestas, matrizRespuestas, palabrasTotales, palabrasEncontradas, dificultad, intentos)
 
             mostrarEstadoJuego(palabrasTotales, palabrasEncontradas, matriz)
-        print("¡Felicidades! Ha encontrado todas las palabras.")
+           
+        print(f"¡Felicidades! Ha encontrado todas las palabras.")
+        finalizarJuego(palabrasEncontradas, palabrasTotales, intentos, dificultad)
 
-    except DatoVacioError as e:
+    except archivoPalabrasError as e:
         print(e)
+        registrarError(e)
 
     except (ValueError, TypeError, IndexError) as e:
         print("Ocurrió un error inesperado. El juego se ha cerrado.")

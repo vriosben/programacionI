@@ -34,11 +34,12 @@ Proyecto para la Materia Programación I de la UADE - 2° Cuatrimestre 2024
     - Pedir Ayuda
     - Contador de intentos
     - Sistema de puntuación 
+    - poner la c (de Ctrl+c) en upper() automático
 
 # BUGS
     - Se rompió el 'N' para salir en cualquier momento
-    
 
+    
  
 
  #########################################################################################################
